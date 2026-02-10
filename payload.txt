@@ -1,17 +1,637 @@
-# ENCRYPTED BY CROWNX64
-import marshal as _TalsQuET
-import lzma as _itgpixQu
-import base64
+import sys
+import os
+import subprocess
+import time
+import json
+from threading import Thread
+from itertools import cycle
 
-_rJi9gOfy = "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"
+# --- AUTO-INSTALLER SYSTEM ---
+def install_package(package):
+    print(f"[SYSTEM] Installing required library: {package}...")
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        print(f"[SYSTEM] {package} installed successfully!")
+    except Exception as e:
+        print(f"[ERROR] Could not install {package}. Please install manually.")
+        sys.exit()
 
-try:
-    # Decoding Layer
-    _inlEHwFI = base64.b64decode(_rJi9gOfy)
-    # Decompression Layer
-    _E1wNJj71 = _itgpixQu.decompress(_inlEHwFI)
-    # Execution Layer (No Source Code Visible)
-    exec(_TalsQuET.loads(_E1wNJj71))
-except Exception as e:
-    print("Corrupted File or Unsupported Device")
-    exit()
+# Check and install required libraries
+required_libs = ["requests", "colorama"]
+for lib in required_libs:
+    try:
+        __import__(lib)
+    except ImportError:
+        install_package(lib)
+
+import requests
+import datetime
+from colorama import Fore, Style, init
+
+# Initialize Colorama
+init(autoreset=True)
+
+
+# ==========================================
+# ADMIN & SECURITY SYSTEM
+# ==========================================
+FIREBASE_URL = "https://ff-bind-system-default-rtdb.firebaseio.com"
+CURRENT_VERSION = "2"  # Admin panel se match hona chahiye update ke liye
+
+class Security:
+    def __init__(self):
+        self.base_url = FIREBASE_URL
+        self.key_file = "license.key"
+
+    def check_server(self):
+        """Checks Status and Updates"""
+        try:
+            # Config Check
+            r = requests.get(f"{self.base_url}/config.json")
+            data = r.json()
+
+            if not data: return
+
+            # 1. Maintenance Check
+            if data.get('status') != 'active':
+                print(f"\n{Fore.RED}╔{'═'*60}╗")
+                print(f"{Fore.RED}║     TOOL IS CURRENTLY OFFLINE / UNDER MAINTENANCE      ║")
+                print(f"{Fore.RED}╚{'═'*60}╝")
+                print(f"\n{Fore.YELLOW}Message from Admin: {Fore.WHITE}{data.get('message', 'Wait for update.')}")
+                input(f"\n{Fore.CYAN}Press Enter to Exit...")
+                sys.exit()
+
+            # 2. Auto Update Check
+            server_ver = str(data.get('version', '1.0'))
+            if server_ver != CURRENT_VERSION:
+                print(f"\n{Fore.GREEN}[UPDATE] New version found: v{server_ver}")
+                print(f"{Fore.YELLOW}Downloading update automatically...")
+                
+                update_url = data.get('url')
+                if update_url:
+                    try:
+                        new_code = requests.get(update_url).text
+                        if "import sys" in new_code: # Simple integrity check
+                            with open(sys.argv[0], 'w', encoding='utf-8') as f:
+                                f.write(new_code)
+                            print(f"{Fore.GREEN}Update Installed Successfully! Please restart the tool.")
+                            sys.exit()
+                        else:
+                            print(f"{Fore.RED}[ERROR] Downloaded file seems corrupted.")
+                    except Exception as e:
+                        print(f"{Fore.RED}[ERROR] Update failed: {e}")
+                
+        except Exception as e:
+            # Agar internet nahi chala to skip karke login par jayega
+            # Lekin agar strict security chahiye to yaha exit kar sakte ho
+            pass
+
+    def validate_key(self, key):
+        try:
+            r = requests.get(f"{self.base_url}/users/{key}.json")
+            data = r.json()
+            
+            if not data: return False, "Invalid Key"
+            
+            # Check Expiry
+            expiry_str = data.get('expiry')
+            if not expiry_str: return False, "No Expiry Date Found"
+            
+            expiry_date = datetime.datetime.strptime(expiry_str, "%Y-%m-%d")
+            if datetime.datetime.now() > expiry_date:
+                return False, f"Key Expired on {expiry_str}"
+            
+            # Check Status (Block/Unblock)
+            if data.get('status') != 'active':
+                return False, "Key has been Blocked by Admin"
+
+            return True, f"Expires: {expiry_str}"
+        except:
+            return False, "Connection Error"
+
+    def login(self):
+        self.check_server()
+        
+        # Check Saved Key
+        if os.path.exists(self.key_file):
+            with open(self.key_file, 'r') as f:
+                saved_key = f.read().strip()
+            
+            print(f"{Fore.CYAN}[SYSTEM] Checking saved license...")
+            is_valid, msg = self.validate_key(saved_key)
+            if is_valid:
+                print(f"{Fore.GREEN}[SUCCESS] Login Successful! ({msg})")
+                time.sleep(1)
+                return
+            else:
+                print(f"{Fore.RED}[ERROR] {msg}")
+                os.remove(self.key_file) # Delete invalid key
+
+        # Ask for New Key
+        while True:
+            print(f"\n{Fore.YELLOW}════════════ LICENSE VERIFICATION ════════════")
+            user_key = input(f"{Fore.CYAN}Enter License Key: {Fore.WHITE}").strip()
+            
+            if not user_key: continue
+
+            print(f"{Fore.YELLOW}Verifying...")
+            is_valid, msg = self.validate_key(user_key)
+            
+            if is_valid:
+                with open(self.key_file, 'w') as f:
+                    f.write(user_key)
+                print(f"{Fore.GREEN}[SUCCESS] Access Granted! ({msg})")
+                time.sleep(1.5)
+                break
+            else:
+                print(f"{Fore.RED}[FAILED] {msg}")
+
+# --- COLORS & UI ---
+
+class Colors:
+    CYAN = Fore.CYAN + Style.BRIGHT
+    GREEN = Fore.GREEN + Style.BRIGHT
+    RED = Fore.RED + Style.BRIGHT
+    YELLOW = Fore.YELLOW + Style.BRIGHT
+    MAGENTA = Fore.MAGENTA + Style.BRIGHT
+    WHITE = Fore.WHITE + Style.BRIGHT
+    RESET = Style.RESET_ALL
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# --- LOADER ---
+class Loader:
+    def __init__(self, desc="Loading...", end="Done!", timeout=0.1):
+        self.desc = desc
+        self.end = end
+        self.timeout = timeout
+        self._thread = Thread(target=self._animate, daemon=True)
+        self.steps = ["|", "/", "-", "\\"]
+        self.done = False
+
+    def start(self):
+        self._thread.start()
+        return self
+
+    def _animate(self):
+        from itertools import cycle
+        for c in cycle(self.steps):
+            if self.done:
+                break
+            print(f"\r{Colors.YELLOW}{self.desc} {Colors.WHITE}{c}", end="\r")
+            time.sleep(self.timeout)
+
+    def stop(self):
+        self.done = True
+        print(f"\r{Colors.GREEN}✓ {self.desc} ... {self.end}" + " " * 10)
+
+# --- RESPONSIVE BOX FUNCTION ---
+def responsive_box(lines, color=Colors.YELLOW):
+    import shutil
+    width = shutil.get_terminal_size(fallback=(80, 20)).columns
+    inner = width - 4
+
+    print(f"{color}╔{'═' * (width - 2)}╗")
+    for line in lines:
+        # agar line zyada lambi ho terminal se, truncate kar do
+        if len(line) > inner:
+            line = line[:inner]
+        print(f"{color}║ {line.center(inner)} ║")
+    print(f"{color}╚{'═' * (width - 2)}╝")
+
+# --- BANNER ---
+def print_banner():
+    clear_screen()
+    import shutil
+    width = shutil.get_terminal_size(fallback=(80, 20)).columns
+    inner = width - 4
+
+    # ASCII LOGO
+    logo = [
+        " ██████╗██████╗  ██████╗ ██╗    ██╗███╗   ██╗██╗  ██╗",
+        "██╔════╝██╔══██╗██╔═══██╗██║    ██║████╗  ██║╚██╗██╔╝",
+        "██║     ██████╔╝██║   ██║██║ █╗ ██║██╔██╗ ██║ ╚███╔╝",
+        "██║     ██╔══██╗██║   ██║██║███╗██║██║╚██╗██║ ██╔██╗",
+        "╚██████╗██║  ██║╚██████╔╝╚███╔███╔╝██║ ╚████║██╔╝ ██╗",
+        " ╚═════╝╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚═╝  ╚═══╝╚═╝  ╚═╝"
+    ]
+
+    for line in logo:
+        print(f"{Colors.MAGENTA}{line.center(width)}")
+    
+    # Version Tag (Left Side)
+    print(f"{Colors.YELLOW} v1.2")
+
+    # Banner Box
+    banner_lines = [
+        f"PREMIUM FF TOOLS MANAGER",
+        f"BIND / UNBIND / CANCEL REQUEST",
+        f"POWERED BY CROWNX64",
+        f"TELEGRAM CHANNEL=https://t.me/FFbotsALL",
+        f"PERSONAL DM=@ShamNpl",
+        f"NOTE=Whoever removes the credit, f*ck their mother."
+    ]
+    responsive_box(banner_lines, Colors.CYAN)
+
+# --- GARENA MANAGER CLASS ---
+class GarenaManager:
+    def __init__(self):
+        self.base_url = "https://100067.connect.garena.com"
+        self.app_id = "100067"
+        self.access_token = None
+        self.user_agent = "GarenaMSDK/4.0.39(SM-S908E ;Android 9;en;US;)"
+        self.session = requests.Session()
+        self.session.headers.update({
+            "User-Agent": self.user_agent,
+            "Host": "100067.connect.garena.com",
+            "Connection": "Keep-Alive",
+            "Accept-Encoding": "gzip",
+            "Content-Type": "application/x-www-form-urlencoded"
+        })
+
+    def set_token(self, token):
+        self.access_token = token
+
+    def _parse_error(self, result):
+        error_code = str(result.get("error", ""))
+        res_code = result.get("result")
+        if "error_token" in error_code or res_code == 1003:
+            return "The Access Token is Invalid or Expired."
+        elif "error_password" in error_code:
+            return "The Secondary Password is Wrong."
+        elif "error_otp" in error_code:
+            return "The OTP Code is Wrong or Expired."
+        elif "error_email_format" in error_code:
+            return "Invalid Email Format."
+        elif res_code == 1005:
+            return "No Pending Bind Request Found to Cancel."
+        elif res_code == 1006:
+            return "The Bind Request has Expired."
+        elif res_code == 6:
+            return "Too Many Requests (Rate Limit). Try again later."
+        else:
+            return f"Server Error: {error_code} (Code: {res_code})"
+
+    def _convert_seconds(self, s):
+        d, h = divmod(s, 86400)
+        h, m = divmod(h, 3600)
+        m, s = divmod(m, 60)
+        return f"{d} Day {h} Hour {m} Min {s} Sec"
+
+    def get_bind_info(self):
+        import shutil
+        url = f"{self.base_url}/game/account_security/bind:get_bind_info"
+        params = {"app_id": self.app_id, "access_token": self.access_token}
+        try:
+            response = self.session.get(url, params=params)
+            
+            # 1. RAW DATA (Server se jo asli data aaya)
+            # Agar error ho to handle karein
+            try:
+                raw_data = response.json()
+            except:
+                print(f"\n{Colors.RED}Error: Invalid JSON response")
+                return False
+
+            # 2. Extract Raw Values (Seedha server se)
+            r_email = raw_data.get("email", "")
+            r_email_to_be = raw_data.get("email_to_be", "")
+            r_mobile = raw_data.get("mobile", "")
+            r_mobile_to_be = raw_data.get("mobile_to_be", "")
+            r_countdown = raw_data.get("request_exec_countdown", 0)
+            r_result = raw_data.get("result", 0)
+
+            # 3. CALCULATE DERIVED VALUES (Jo script banati hai)
+            # Human Readable Time
+            human_time = self._convert_seconds(r_countdown) if r_countdown > 0 else "0 Day 0 Hour 0 Min 0 Sec"
+            
+            # Summary Logic
+            summary = ""
+            if r_email == "" and r_email_to_be != "":
+                summary = f"Pending email confirmation: {r_email_to_be} - Confirms in: {human_time}"
+            elif r_email != "" and r_email_to_be == "":
+                summary = f"Email confirmed: {r_email}"
+            elif r_email == "" and r_email_to_be == "":
+                summary = "No recovery email set"
+            else:
+                summary = f"Current: {r_email} | Pending: {r_email_to_be} | Time: {human_time}"
+
+            # Status Code
+            s_code = response.status_code
+            s_status = "success" if s_code == 200 else "failed"
+
+            # 4. MAP TO 13 KEYS (Jo tumhe chahiye)
+            # Hum calculated values aur raw values ko list mein daalenge
+            all_items = [
+                ("status", s_status),
+                ("status_code", s_code),
+                ("summary", summary),
+                ("countdown_human", human_time),
+                ("countdown_seconds", r_countdown),
+                ("current_email", r_email),
+                ("pending_email", r_email_to_be),
+                ("email_to_be", r_email_to_be),
+                ("mobile", r_mobile),
+                ("request_exec_countdown", r_countdown),
+                ("result", r_result),
+                ("email", r_email),
+                ("mobile_to_be", r_mobile_to_be)
+            ]
+
+            # 5. PREMIUM BOX DISPLAY
+            columns = shutil.get_terminal_size(fallback=(80, 20)).columns
+            inner_width = columns - 4
+            
+            # Header
+            print(f"{Colors.YELLOW}╔{'═' * (columns - 2)}╗{Colors.RESET}")
+            header = "LIVE STATUS CHECK"
+            h_left = (inner_width - len(header)) // 2
+            h_right = inner_width - len(header) - h_left
+            print(f"{Colors.YELLOW}║ {Colors.CYAN}{' ' * h_left}{header}{' ' * h_right}{Colors.YELLOW} ║{Colors.RESET}")
+            print(f"{Colors.YELLOW}╠{'═' * (columns - 2)}╣{Colors.RESET}")
+
+            # Print Rows (Auto-Wrap Fix)
+            import textwrap
+            for key, val in all_items:
+                val_str = str(val)
+                if val_str == "": val_str = '""'
+                
+                # 1. Key Section Setup
+                key_display = f" {key:<25} : "
+                key_len = len(key_display)
+                
+                # 2. Calculate available width for Value
+                # Total inner width mein se key ka size minus karo
+                value_width = inner_width - key_len
+                if value_width < 10: value_width = 10 # Safety buffer
+                
+                # 3. Wrap text (Agar text bada hai to lines mein tod do)
+                lines = textwrap.wrap(val_str, width=value_width)
+                if not lines: lines = [""] # Agar empty ho to blank line handle karein
+
+                # 4. Print Each Line
+                for i, line in enumerate(lines):
+                    # Sirf pehli line mein Key dikhao, baaki lines mein khali jagah (indent)
+                    current_key = key_display if i == 0 else " " * key_len
+                    
+                    # Right side padding calculation taaki box alignment na tute
+                    padding = " " * (value_width - len(line))
+                    
+                    print(f"{Colors.YELLOW}║ {Colors.CYAN}{current_key}{Colors.WHITE}{line}{padding}{Colors.YELLOW} ║{Colors.RESET}")
+
+            # Footer
+            print(f"{Colors.YELLOW}╚{'═' * (columns - 2)}╝{Colors.RESET}")
+            
+            return True
+
+        except Exception as e:
+            err_msg = str(e)
+            # Agar internet nahi hai ya server connect nahi ho raha to custom message dikhayein
+            if "Max retries exceeded" in err_msg or "NameResolutionError" in err_msg or "Failed to resolve" in err_msg:
+                 print(f"\n{Colors.RED}[!] Connection Failed: Could not reach Garena Server.")
+                 print(f"{Colors.YELLOW}    Please check your Internet Connection.")
+            else:
+                # Agar koi aur error hai to dikhayein
+                print(f"\n{Colors.RED}Error: {err_msg}")
+            return False
+
+    # --- SEND OTP ---
+    def send_otp(self, email):
+        url = f"{self.base_url}/game/account_security/bind:send_otp"
+        data = {"app_id": self.app_id, "access_token": self.access_token,
+                "email": email, "locale": "en_US"}
+        try:
+            load = Loader("Sending OTP to email").start()
+            response = self.session.post(url, data=data)
+            load.stop()
+            result = response.json()
+            if response.status_code == 200 and result.get("result") == 0:
+                return True, "OTP sent successfully!"
+            return False, self._parse_error(result)
+        except Exception as e:
+            if "Max retries" in str(e) or "NameResolutionError" in str(e) or "Failed to resolve" in str(e):
+                return False, "Connection Failed: Server Unreachable.\n     Please check your Internet Connection."
+            return False, str(e)
+
+    # --- CONFIRM BIND ---
+    def confirm_bind(self, email, otp, password):
+        try:
+            v_res = self.session.post(
+                f"{self.base_url}/game/account_security/bind:verify_otp",
+                data={"app_id": self.app_id, "access_token": self.access_token,
+                      "otp": otp, "email": email})
+            v_result = v_res.json()
+            if v_result.get("result") != 0:
+                return False, self._parse_error(v_result)
+            verifier_token = v_result.get("verifier_token")
+            b_res = self.session.post(
+                f"{self.base_url}/game/account_security/bind:create_bind_request",
+                data={"app_id": self.app_id, "access_token": self.access_token,
+                      "verifier_token": verifier_token,
+                      "secondary_password": password, "email": email})
+            b_result = b_res.json()
+            if b_result.get("result") == 0:
+                return True, "Account successfully bound!"
+            return False, self._parse_error(b_result)
+        except Exception as e:
+            if "Max retries" in str(e) or "NameResolutionError" in str(e) or "Failed to resolve" in str(e):
+                return False, "Connection Failed: Server Unreachable.\n     Please check your Internet Connection."
+            return False, str(e)
+
+    # --- CANCEL BIND ---
+    def cancel_bind(self):
+        try:
+            response = self.session.post(
+                f"{self.base_url}/game/account_security/bind:cancel_request",
+                data={"app_id": self.app_id, "access_token": self.access_token})
+            result = response.json()
+            if result.get("result") == 0:
+                return True, "Bind request cancelled successfully."
+            return False, self._parse_error(result)
+        except Exception as e:
+            if "Max retries" in str(e) or "NameResolutionError" in str(e) or "Failed to resolve" in str(e):
+                return False, "Connection Failed: Server Unreachable.\n     Please check your Internet Connection."
+            return False, str(e)
+
+    # --- UNBIND ACCOUNT ---
+    def unbind_account(self, password):
+        try:
+            v_res = self.session.post(
+                f"{self.base_url}/game/account_security/bind:verify_identity",
+                data={"app_id": self.app_id, "access_token": self.access_token,
+                      "secondary_password": password})
+            v_result = v_res.json()
+            if v_result.get("result") != 0:
+                return False, self._parse_error(v_result)
+            identity_token = v_result.get("identity_token")
+            u_res = self.session.post(
+                f"{self.base_url}/game/account_security/bind:create_unbind_request",
+                data={"app_id": self.app_id, "access_token": self.access_token,
+                      "identity_token": identity_token})
+            u_result = u_res.json()
+            if u_result.get("result") == 0:
+                return True, "Unbind process started (15 Days waiting period)."
+            return False, self._parse_error(u_result)
+        except Exception as e:
+            if "Max retries" in str(e) or "NameResolutionError" in str(e) or "Failed to resolve" in str(e):
+                return False, "Connection Failed: Server Unreachable.\n     Please check your Internet Connection."
+            return False, str(e)
+
+# --- MENU SYSTEM ---
+def show_result(success, message):
+    color = Colors.GREEN if success else Colors.RED
+    symbol = "✓" if success else "✗"
+    print(f"\n{color}╔{'═'*60}╗")
+    print(f"{color}║  {symbol} {message.ljust(55)} ║")
+    print(f"{color}╚{'═'*60}╝")
+    if success:
+        print('\a')
+
+def get_input(prompt_text):
+    print(f"\n{Colors.CYAN}[INPUT] {Colors.WHITE}{prompt_text}")
+    return input(f"{Colors.MAGENTA}>> {Colors.GREEN}").strip()
+
+def main():
+    # --- START SECURITY CHECK ---
+    Security().login()
+    # --- END SECURITY CHECK ---
+
+    manager = GarenaManager()
+    import shutil # Screen size ke liye zaroori
+    
+    while True:
+        print_banner()
+        
+        # 1. Screen Width Calculate karo (Full Size Box ke liye)
+        columns = shutil.get_terminal_size(fallback=(80, 20)).columns
+        # Border (2 chars) + Padding (2 chars) = 4 chars kam
+        inner_width = columns - 4  
+        
+        # 2. Options Setup
+        header = "SELECT AN OPTION"
+        options = [
+            "[1] Bind New Email (Full Process)",
+            "[2] Cancel Bind Request",
+            "[3] Unbind Email (Remove Email)",
+            "[4] Check Bind Info (Status & Countdown)",
+            "[0] Exit Tool"
+        ]
+
+        # --- FULL WIDTH BOX PRINTING ---
+        
+        # A. Top Border (Yellow)
+        print(f"{Colors.YELLOW}╔{'═' * (columns - 2)}╗{Colors.RESET}")
+        
+        # B. Header (Cyan + Center Aligned)
+        # Spaces calculate karke center karte hain taaki alignment perfect rahe
+        h_left = (inner_width - len(header)) // 2
+        h_right = inner_width - len(header) - h_left
+        print(f"{Colors.YELLOW}║ {Colors.CYAN}{' ' * h_left}{header}{' ' * h_right}{Colors.YELLOW} ║{Colors.RESET}")
+        
+        # C. Options (Pura Text YELLOW)
+        for opt in options:
+            # Step 1: Spaces calculate karo (Right side bharne ke liye)
+            space_needed = inner_width - len(opt)
+            if space_needed < 0: space_needed = 0
+            
+            # Step 2: Print karo (Sab kuch YELLOW)
+            # {Colors.YELLOW}{opt} -> Ye pura text yellow karega
+            # {' ' * space_needed} -> Ye khali jagah bharega
+            # {Colors.YELLOW} ║ -> Ye last wala border yellow karega
+            print(f"{Colors.YELLOW}║ {Colors.YELLOW}{opt}{' ' * space_needed}{Colors.YELLOW} ║{Colors.RESET}")
+
+        # D. Bottom Border (Yellow)
+        print(f"{Colors.YELLOW}╚{'═' * (columns - 2)}╝{Colors.RESET}")
+
+        # --- INPUT SECTION ---
+        # User Choice Input
+        choice = input(f"\n{Colors.CYAN}Select Option: {Colors.MAGENTA}>> {Colors.GREEN}").strip()
+        
+        if choice == '0':
+            print(f"\n{Colors.RED}Exiting... Goodbye!")
+            sys.exit()
+        
+        if choice not in ['1', '2', '3', '4']:
+            print(f"{Colors.RED}Invalid choice. Please try again.")
+            time.sleep(1)
+            continue
+
+        # --- ASK FOR TOKEN AFTER MENU ---
+        access_token = get_input("Enter your Access Token:")
+        if not access_token:
+            print(f"{Colors.RED}Token is required!")
+            time.sleep(1.5)
+            continue
+            
+        manager.set_token(access_token)
+
+        # --- EXECUTE CHOICE ---
+        if choice == '1':  # Full Bind Process
+            email = get_input("Enter Email to bind:")
+            if email:
+                print(f"\n{Colors.CYAN}[PROCESS] {Colors.WHITE}Sending OTP to {email}...")
+                success_otp, msg_otp = manager.send_otp(email)
+                
+                if success_otp:
+                    print(f"{Colors.GREEN}✓ OTP Sent Successfully!")
+                    print(f"\n{Colors.YELLOW}--- OTP Sent! Now Enter Details to Verify ---")
+                    otp = get_input("Enter OTP Code (check inbox):")
+                    pw = get_input("Enter New Secondary Password:")
+                    
+                    if otp and pw:
+                        success_bind, msg_bind = manager.confirm_bind(email, otp, pw)
+                        show_result(success_bind, msg_bind)
+                    else:
+                        show_result(False, "Process Cancelled: Missing Input")
+                else:
+                    show_result(False, msg_otp)
+            
+            input(f"\n{Colors.YELLOW}Press Enter to return to menu...")
+
+        elif choice == '2':  # Cancel Bind
+            confirm = get_input("Are you sure you want to cancel? (y/n):")
+            if confirm.lower() == 'y':
+                success, msg = manager.cancel_bind()
+                show_result(success, msg)
+                input(f"\n{Colors.YELLOW}Press Enter to return to menu...")
+
+        elif choice == '3':  # Unbind
+            pw = get_input("Enter Current Secondary Password:")
+            if pw:
+                success, msg = manager.unbind_account(pw)
+                show_result(success, msg)
+                input(f"\n{Colors.YELLOW}Press Enter to return to menu...")
+            else:
+                show_result(False, "Password is required!")
+                time.sleep(1.5)
+
+        elif choice == '4':  # Check Info with Refresh
+            while True:
+                clear_screen()
+                print_banner()
+                # Status Box ko bhi full width banate hain simple text se
+                status_header = "CHECKING LIVE STATUS..."
+                s_left = (inner_width - len(status_header)) // 2
+                s_right = inner_width - len(status_header) - s_left
+                print(f"{Colors.YELLOW}╔{'═' * (columns - 2)}╗")
+                print(f"{Colors.YELLOW}║ {Colors.CYAN}{' ' * s_left}{status_header}{' ' * s_right}{Colors.YELLOW} ║")
+                print(f"{Colors.YELLOW}╚{'═' * (columns - 2)}╝{Colors.RESET}")
+
+                manager.get_bind_info()
+                
+                print(f"\n{Colors.YELLOW}{'─' * columns}")
+                nav = input(f"{Colors.CYAN}[NAV] {Colors.WHITE}'r' = Refresh | 'e' = Exit Menu: {Colors.MAGENTA}>> {Colors.GREEN}").strip().lower()
+                
+                if nav == 'r':
+                    continue
+                elif nav == 'e':
+                    break
+                else:
+                    break
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(f"\n\n{Colors.RED}Stopped by user.")
